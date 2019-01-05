@@ -1,50 +1,53 @@
 import queue
 import threading
-import automationhat
-import smbus #I2C interface
+import piconzero as pz
 
 # Wheel encoder code for analog sensors attached to a continous rotation servo motor.
+# Pomironi Picon Zero version
 #By Maurice Tedder
-#December 25, 2018
+#January 2, 2018
 #Ref: https://www.tutorialspoint.com/python/python_multithreading.htm
+#   http://4tronix.co.uk/blog/?p=1224 (picon)
 
-THRESHOLD = 2.5
+#initialize and clear settings
+pz.init( )
 
-bus = smbus.SMBus(1)
-addr = 0x40
+THRESHOLD = 500
 
-#init servo duty cycle
-#bus.write_byte_data(addr, 0, 0x20) #200 Hz
-#bus.write_byte_data(addr, 0xfe, 0x1e) #200 Hz
-bus.write_byte_data(addr, 0, 0x20) #50 HZ
-bus.write_byte_data(addr, 0xfe, 0x1e) #50 Hz
+#init servo outputs
+
 #ch0
-servo0_start = 0x06
-servo0_end = 0x08
+servoPort0 = 0
 #ch1
-servo1_start = 0x0A
-servo1_end = 0x0C
+servoPort1 = 1
 #ch2
-servo2_start = 0x0E
-servo2_end = 0x10
+servoPort2 = 2
 
-def motor(bus, addr, servo_start, servo_end, pwm):#activate servo hat servo motor       
-    bus.write_word_data(addr, servo_start, 0)    
-    bus.write_word_data(addr, servo_end, pwm)
+#define input ports
+analogPort0 = 0 #input port 0
+analogPort1 = 1 #input port 1
+
+# Set output mode
+pz.setOutputConfig(servoPort0, 2) #set to output Servo (0 - 180)
+#pz.setOutputConfig(servoPort0, 1)    # set output 0 to PWM (100)
+
+# Set input mode
+pz.setInputConfig(analogPort0, 1)     # set input 0 to Analog
+
+def motor(servoPort, speed):#activate servo hat servo motor           
+    pz.setOutput (servoPort, speed)
         
         
 class Encoder(threading.Thread):
     'Class for Analog encoder on continous rotation servo motors'
   
-    def __init__(self, bus, addr, servo_start, servo_end, threshold):
+    def __init__(self, servo_port, analog_port, threshold):
         threading.Thread.__init__(self)
         self.q = queue.Queue() #q, command queue
         self.event = threading.Event()
-        self.encoderLoop = True
-        self.bus = bus
-        self.addr = addr
-        self.servo_start = servo_start
-        self.servo_end = servo_end
+        self.encoderLoop = True       
+        self.servo_port = servo_port
+        self.analog_port = analog_port        
         self.threshold = threshold #analog sensor encoder wheel signal threshold
 
     def startEncoder(self):#start encoder loop
@@ -53,7 +56,7 @@ class Encoder(threading.Thread):
     def stopEncoder(self):#Stop encoder loop
             self.encoderLoop = False
         
-    def addCmd(self, cmd):#function to add command tuple to the command queue       
+    def addCmd(self, cmd):#function to add command tuple to the command queue        
         self.q.put(cmd)        
         
     def run(self):        
@@ -62,19 +65,20 @@ class Encoder(threading.Thread):
         count = 0
         continueLoop = False #encoder tick counter loop flag
         while self.encoderLoop:
-            self.event.wait() #reduce threading cpu resource by only looping when neseccery          
+            self.event.wait() #reduce threading cpu resource by only looping when neseccery
             if not self.q.empty():#Test for new commands in the queue
                 continueLoop = True
                 data = self.q.get() #get command tuple from queue and parse data
                 pwm = data[0]
-                cmd = data[1]                       
-                motor(self.bus, self.addr, self.servo_start, self.servo_end, pwm)                
+                cmd = data[1]
+                continueLoop = True
+                motor(self.servo_port, pwm)                
             else:
-                self.event.clear()
+                self.event.clear()               
                     
             while continueLoop:#position control feedback loop
-                #print(str(self.threshold))
-                val = automationhat.analog[0].read() #get current value of wheel encoder sensor                
+                #print(str(self.threshold))        
+                val = pz.readInput(self.analog_port)
                 if (val < self.threshold):
                     tick = True
                 else:
@@ -91,17 +95,16 @@ class Encoder(threading.Thread):
                     tickp = False
                     continueLoop = False                                                        
     
-#create motor command list
-cmds = [(1639, 20), (1250, 0),(1000, 50), (1250, 0)]
-#cmds = [(1639, 0)]
+#create motor command list (CCW for 20 ticks, Stop, CW for 50 ticks, Stop)
+cmds = [(180, 20), (90, 0),(50, 50), (90, 0)]
 
 #Create encoder object
-e0 = Encoder(bus, addr, servo0_start, servo0_end,THRESHOLD)
+e0 = Encoder(servoPort0, analogPort0,THRESHOLD)
 
 #add commands from command list to encoder command queue
 for dat in cmds:
     e0.addCmd(dat)
-
+    
 e0.event.set()#send process command event to encoder thread
 
 #start encoder thread
@@ -131,15 +134,15 @@ e0.start()
 #---End interactive servo command mode code ---
 #
 
-#wait for thread to complete
-#e1.join()
 
 #end encoder thread
-user_input = input("Enter y to exit:")
-if user_input == 'y':
-    e0.stopEncoder() #end encoder thread
+user_input = input("Hit any key to end:")
+e0.stopEncoder() #end encoder thread
     
 #wait for thread to complete
 e0.join()
 
 print("THE END")
+
+#reset picon zero
+pz.cleanup()
