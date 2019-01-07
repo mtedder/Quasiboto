@@ -39,7 +39,7 @@ import queue
 #Modify the /etc/rc.local file to have this program run on startup in headless mode
 #add the following lines to the rc.local file
 #sudo python3 /home/pi/Quasiboto/code/raspberryPiZeroW/quasiboto_v1_airsoft.py &
-# exit 0
+#exit 0
 
 PAGE="""\
 <html>
