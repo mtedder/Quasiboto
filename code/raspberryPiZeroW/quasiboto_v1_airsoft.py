@@ -266,10 +266,10 @@ def j(param1, param2):#output 5
     #automationhat.output[2].write(int(param1))
     pass
 
-def k(param1, param2):
+def k(param1, param2):#Not implemented
     print ("k:" + param1 + "," + param2)
 
-def l(param1, param2):
+def l(param1, param2):#stop all motors emergency stop on all motors
     #print ("l:" + param1 + "," + param2)
     stopAllMotors()    
 
@@ -283,7 +283,7 @@ def n(param1, param2):#return digital input read on all ports
     #print ("n:" + vals)
     bt.send(vals)
 
-def o(param1, param2):#//Airsoft gun trigger
+def o(param1, param2):#Airsoft gun trigger
     #print ("o:" + param1 + "," + param2)    
     pz.setMotor(motorA, int(param1))
 
@@ -301,7 +301,7 @@ def defaultFn(param1, param2):
     #do nothing
     pass
 
-def stopAllMotors(param1, param2):
+def stopAllMotors():
     pz.stop() #Stop DC motors
     #stop all servo motors
     motor(servoPort0, STOP)
@@ -346,13 +346,12 @@ commands = {
             'i':i,#digital output 4
             'j':j,#digital output 5
             'k':k,#Not implemented
-            'l':l,#Not implemented
+            'l':l,#stop all motors emergency stop on all motors
             'm':m,#return analog and digital read on all ports
             'n':n,#return digital read on all ports
             'o':o,#airsoft gun trigger
-            'p':p,#return analog on all ports
+            'p':p,#return digital input read on all ports
             'n':n,#read analog sensor data
-            's':stopAllMotors,#emergency e-stop
             'z':z #code version info
         }
 
