@@ -18,7 +18,7 @@
     },
     "isNumericSensorData": false
   },
-"Quasiboto":{"n":"e180,?,f0,?,","s":"e0,?,f180,?,", "nw":"e0,?,f0,?,", "ne":"e180,?,f180,?,", "se":"e70,?,f80,?,", "sw":"e80,?,f70,?,", "stop":"e90,0,f90,0,","pin11Off": "h0,0,","pin11On": "h1,0,","pin13Off": "i0,0,","pin13On": "i1,0,","a": "o100,0,","b": "l0,0,","c": "p0,0,","sensorData":"m0,0,", "servoPos1":"g?,0,", "sensorDelimiters":{"A1":44,"A2":44,"D1&2":44}, "isNumericSensorData":false},
+"Quasiboto":{"n":"e180,?,f0,?,","s":"e0,?,f180,?,", "nw":"e0,?,f0,?,", "ne":"e180,?,f180,?,", "se":"e70,?,f80,?,", "sw":"e80,?,f70,?,", "stop":"e90,0,f90,0,","pin11Off": "h0,0,","pin11On": "h1,0,","pin13Off": "i0,0,","pin13On": "i1,0,","a": "o100,0,","b": "l0,0,","c": "p0,0,","estop": "s0,0,","sensorData":"m0,0,", "servoPos1":"g?,0,", "sensorDelimiters":{"A1":44,"A2":44,"D1&2":44}, "isNumericSensorData":false},
 "Spider":{"n":"\u00FF\u00FF\u00AA\u0055\u00AA\u0055\u0037\u00BA\u0014\u0000\u0000\u0000\u0000\u0001\u000D\u000D",
 "s":"\u00FF\u00FF\u00AA\u0055\u00AA\u0055\u0037\u00BA\u0014\u0000\u0000\u0000\u0000\u0001\u0010\u0010",
 "a":"\u00FF\u00FF\u00AA\u0055\u00AA\u0055\u0037\u00BA\u0014\u0000\u0000\u0000\u0000\u0001\u000C\u000C",

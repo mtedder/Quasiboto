@@ -301,7 +301,7 @@ def defaultFn(param1, param2):
     #do nothing
     pass
 
-def stopAllMotors():
+def stopAllMotors(param1, param2):
     pz.stop() #Stop DC motors
     #stop all servo motors
     motor(servoPort0, STOP)
@@ -352,6 +352,7 @@ commands = {
             'o':o,#airsoft gun trigger
             'p':p,#return analog on all ports
             'n':n,#read analog sensor data
+            's':stopAllMotors,#emergency e-stop
             'z':z #code version info
         }
 
