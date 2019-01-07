@@ -35,9 +35,10 @@ import queue
 #https://www.tutorialspoint.com/python/python_multithreading.htm
 #http://4tronix.co.uk/blog/?p=1224 (picon)
 
+#Clone project from GitHub repo and make the following modifications
 #Modify the /etc/rc.local file to have this program run on startup in headless mode
 #add the following lines to the rc.local file
-#sudo python3 /home/pi/maurice/robotcode/quasiboto_v1_airsoft.py &
+#sudo python3 /home/pi/Quasiboto/code/raspberryPiZeroW/quasiboto_v1_airsoft.py &
 # exit 0
 
 PAGE="""\
