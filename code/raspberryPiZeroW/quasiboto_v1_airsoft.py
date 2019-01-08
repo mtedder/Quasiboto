@@ -283,7 +283,7 @@ def n(param1, param2):#return digital input read on all ports
     #print ("n:" + vals)
     bt.send(vals)
 
-def o(param1, param2):#Airsoft gun trigger
+def o(param1, param2):#Airsoft gun trigger (MotorA output). Closed loop controlled by limit switch
     #print ("o:" + param1 + "," + param2)    
     pz.setMotor(motorA, int(param1))
 
@@ -291,6 +291,10 @@ def p(param1, param2):#return analog on all ports
     vals = str(pz.readInput(analogPort0)) + "," + str(pz.readInput(analogPort1)) + "\n"
     #print ("p:" + vals)
     bt.send(vals)
+
+def q(param1, param2):#MotorB output. Open loop control
+    #print ("q:" + param1 + "," + param2)    
+    pz.setMotor(motorB, int(param1))
     
 def z(param1, param2):#firmware version number
     print ("z:" + param1 + "," + param2)
