@@ -6,6 +6,7 @@
 from bluedot.btcomm import BluetoothServer
 from gpiozero import Button
 from signal import pause
+from subprocess import check_output
 import piconzero as pz
 
 #pi camera inports
@@ -295,6 +296,12 @@ def p(param1, param2):#return analog on all ports
 def q(param1, param2):#MotorB output. Open loop control
     #print ("q:" + param1 + "," + param2)    
     pz.setMotor(motorB, int(param1))
+
+def s(param1, param2):#return videostreaming url for this robots IP camera in json format
+    #print ("s:" + param1 + "," + param2) 
+    ips = check_output(["hostname", "-I"])
+    bt.send("{'ipcamurl':'http://" + ips.decode().strip() + ":8000/stream.mjpg'}\n")
+    #print ("{'ipcamurl':'http://" + ips.decode().strip() + ":8000/stream.mjpg'}") 
     
 def z(param1, param2):#firmware version number
     print ("z:" + param1 + "," + param2)
@@ -356,6 +363,7 @@ commands = {
             'o':o,#airsoft gun trigger
             'p':p,#return digital input read on all ports
             'n':n,#read analog sensor data
+            's':s,#return videostreaming url for this robots IP camera
             'z':z #code version info
         }
 
