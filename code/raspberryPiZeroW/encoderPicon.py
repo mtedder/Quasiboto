@@ -7,8 +7,11 @@ import piconzero as pz
 #By Maurice Tedder
 #January 2, 2018
 #Ref: https://www.tutorialspoint.com/python/python_multithreading.htm
-#   http://4tronix.co.uk/blog/?p=1224 (picon)
 
+##Setup to use I2C and smbus correctly:
+#http://4tronix.co.uk/blog/?p=1224 (picon)
+##sudo apt-get install python-smbus python3-smbus python-dev python3-dev
+##Set enable i2c device in the Preferences->Raspberry Pi Configuration->Interfaces menu
 #initialize and clear settings
 pz.init( )
 
@@ -49,12 +52,14 @@ class Encoder(threading.Thread):
         self.servo_port = servo_port
         self.analog_port = analog_port        
         self.threshold = threshold #analog sensor encoder wheel signal threshold
+        self.continueLoop = False
 
     def startEncoder(self):#start encoder loop
             self.encoderLoop = True
             
     def stopEncoder(self):#Stop encoder loop
             self.encoderLoop = False
+            self.continueLoop = False
         
     def addCmd(self, cmd):#function to add command tuple to the command queue        
         self.q.put(cmd)        
@@ -63,22 +68,23 @@ class Encoder(threading.Thread):
         tick = False
         tickp = False
         count = 0
-        continueLoop = False #encoder tick counter loop flag
+        self.continueLoop = False #encoder tick counter loop flag
         while self.encoderLoop:
             self.event.wait() #reduce threading cpu resource by only looping when neseccery
             if not self.q.empty():#Test for new commands in the queue
-                continueLoop = True
+                self.continueLoop = True
                 data = self.q.get() #get command tuple from queue and parse data
                 pwm = data[0]
                 cmd = data[1]
-                continueLoop = True
+                self.continueLoop = True
                 motor(self.servo_port, pwm)                
             else:
                 self.event.clear()               
                     
-            while continueLoop:#position control feedback loop
+            while self.continueLoop:#position control feedback loop
                 #print(str(self.threshold))        
                 val = pz.readInput(self.analog_port)
+                print(str(val))  
                 if (val < self.threshold):
                     tick = True
                 else:
@@ -93,13 +99,13 @@ class Encoder(threading.Thread):
                     count = 0
                     tick = False
                     tickp = False
-                    continueLoop = False                                                        
+                    self.continueLoop = False                                                        
     
 #create motor command list (CCW for 20 ticks, Stop, CW for 50 ticks, Stop)
 cmds = [(180, 20), (90, 0),(50, 50), (90, 0)]
 
 #Create encoder object
-e0 = Encoder(servoPort0, analogPort0,THRESHOLD)
+e0 = Encoder(servoPort1, analogPort1,THRESHOLD)
 
 #add commands from command list to encoder command queue
 for dat in cmds:
