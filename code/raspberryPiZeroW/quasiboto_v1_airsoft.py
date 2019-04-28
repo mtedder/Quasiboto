@@ -145,7 +145,7 @@ def data_received(data):
         if(result is not None): #transmit data for functions that have a return value
             bt.send(result)
         #print(result)
-print('started!!!')        
+       
 bot = QuasiBoto.Robot()
 
 commands = {
