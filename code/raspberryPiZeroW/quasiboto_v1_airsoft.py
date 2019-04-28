@@ -18,7 +18,9 @@ import QuasiBoto
 
 ## gpio pins used: https://pinout.xyz/
 ##Picon Zero Motor A = Airsoft motor
-##17 = Airsoft limitswith/button (BCM 17 - pin 11)
+#(motor A, positive is forward if red->left & blk->right
+#(motor B, positive is forward if blk->left & red->right
+##17 = Airsoft limitswith/button (BCM 17 - pin 11 - G17) Connect red wire from Airsoft switch to this pin
 #view camera streaming
 #http://localhost:8000/index.html
 
@@ -143,7 +145,7 @@ def data_received(data):
         if(result is not None): #transmit data for functions that have a return value
             bt.send(result)
         #print(result)
-        
+print('started!!!')        
 bot = QuasiBoto.Robot()
 
 commands = {

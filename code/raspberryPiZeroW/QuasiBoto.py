@@ -19,7 +19,7 @@ import queue
 
 ## gpio pins used: https://pinout.xyz/
 ##Picon Zero Motor A = Airsoft motor
-##17 = Airsoft limitswith/button (BCM 17 - pin 11)
+##17 = Airsoft limitswith/button (BCM 17 - pin 11 - G17) Connect red wire from Airsoft switch to this pin
 #view camera streaming
 #http://localhost:8000/index.html
 
@@ -126,7 +126,8 @@ class Robot():
         self.limitSwitch = Button(LIMIT_SWITCH_GPIO_PIN)
         self.limitSwitch.when_released = self.checkLimitSwitch #airsoft limit switch function
 
-    def checkLimitSwitch(self,device):   
+    def checkLimitSwitch(self,device):
+##        print('limit sw')
         pz.setMotor(motorA, 0)
 
     def motor(self, servoPort, speed):#activate servo motor
