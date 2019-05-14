@@ -2,6 +2,9 @@
 
 Quasiboto is an Open Source robotics platform compatible with the DroidGuru Web app. There are 4 versions of the Quasibot platform:
 
+* Motherbox Robot Controller
+![Motherbox](./pics/motherbox_closeup.jpg)
+
 * Quasiboto Baby
 ![Quasiboto Baby](./pics/quasibotBaby_iso.jpg)
 ![Quasiboto Baby](./pics/quasibotBaby_front.jpg)
@@ -21,8 +24,11 @@ Quasiboto is an Open Source robotics platform compatible with the DroidGuru Web 
 ## Quasibot
 Quasibot can be controlled remotely with a Bluetooth connection using the [DroidGuru Android App](https://play.google.com/store/apps/details?id=ris.com.robotbuddy) in manual mode or from a web browser using the [DroidGuru Android App](https://play.google.com/store/apps/details?id=ris.com.robotbuddy) and the [DroidGuru Web App](http://droidguru.net/).
 
+## Quasibot and donkeycar
+Quasibot can be used with [donkeycar](http://docs.donkeycar.com/) to train a Neural Network to autonomously pilot your Quasibot around a track. The Quasibot donkeycar repo fork can be found [HERE!](https://github.com/mtedder/donkeycar)
+
 ## Quasibot Tutorials on YouTube
 [YouTube Tutorials & Videos](https://www.youtube.com/channel/UCOfMeLmnqhktNxsNVfA3sCg)
 
 ## Parts Files
-You can make the LaserCut parts on your own using the svg parts file in the partsfile folder or order then from our [Ponoko store](https://www.ponoko.com/design-your-own/products/quasiboto-airsoft-momma-15365#).
+You can make the LaserCut parts on your own using the svg parts file in the partsfile folder or order then from our [Ponoko store](https://www.ponoko.com/showroom/roboticintelligencesoftware/products).
