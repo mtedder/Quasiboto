@@ -32,3 +32,7 @@ Quasibot can be used with [donkeycar](http://docs.donkeycar.com/) to train a Neu
 
 ## Parts Files
 You can make the LaserCut parts on your own using the svg parts file in the partsfile folder or order then from our [Ponoko store](https://www.ponoko.com/showroom/roboticintelligencesoftware/products).
+
+## Instructables
+[Modifiy Taigen Airsoft Unit for Raspberry Pi](https://www.instructables.com/id/Modifiy-Taigen-Airsoft-Firing-Unit-for-Raspberry-P/)
+[Add an Encoder to Feetech Micro 360 Degree Continuous Rotation Servo FS90R](https://www.instructables.com/id/Add-an-Encoder-to-Feetech-Micro-360-Degree-Continu/)
