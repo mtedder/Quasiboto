@@ -106,11 +106,11 @@ pz.setInputConfig(analogPort1, ANALOG_INPUT) # set input 1 to Analog
 pz.setInputConfig(digitalInPort2, DIGITAL_INPUT) # set input 2 to Digital
 pz.setInputConfig(digitalInPort3, DIGITAL_INPUT) # set input 3 to Digital
 
-  
+
 class Robot():
     'Class for Controlling a QuasiBoto Robot'
-  
-    def __init__(self):    
+
+    def __init__(self):
         #Create encoder objects
         self.e0 = Encoder(servoPort0, analogPort0,ENCODER0_THRESHOLD, self.motor)
         self.e1 = Encoder(servoPort1, analogPort1,ENCODER0_THRESHOLD, self.motor)
@@ -147,7 +147,7 @@ class Robot():
 
     def g(self, speed, param2):#servo ch 2
         #print ("g:" + speed + "," + param2)
-        motor(servoPort2, int(speed));
+        self.motor(servoPort2, int(speed));
 
     def h(self, param1, param2):#digital output 3
         pz.setOutput(digitalOutPort3, int(param1))
@@ -164,20 +164,20 @@ class Robot():
 
     def l(self, param1, param2):#stop all motors emergency stop on all motors
         #print ("l:" + param1 + "," + param2)
-        stopAllMotors()    
+        stopAllMotors()
 
     def m(self, param1, param2):#return analog and digital read on all ports
         vals = str(pz.readInput(analogPort0)) + "," + str(pz.readInput(analogPort1)) + "," + str(pz.readInput(digitalInPort2)) + ":" + str(pz.readInput(digitalInPort3)) + "\n"
         #print("m:" + vals)
         return vals
-        
+
     def n(self, param1, param2):#return digital input read on all ports
         vals = str(pz.readInput(digitalInPort2)) + "," + str(pz.readInput(digitalInPort3)) + "\n"
         #print ("n:" + vals)
         return vals
 
     def o(self, param1, param2):#Airsoft gun trigger (MotorA output). Closed loop controlled by limit switch
-        #print ("o:" + param1 + "," + param2)    
+        #print ("o:" + param1 + "," + param2)
         pz.setMotor(motorA, int(param1))
 
     def p(self, param1, param2):#return analog on all ports
@@ -186,18 +186,18 @@ class Robot():
         return vals
 
     def q(self, param1, param2):#MotorB output. Open loop control
-        #print ("q:" + param1 + "," + param2)    
+        #print ("q:" + param1 + "," + param2)
         pz.setMotor(motorB, int(param1))
 
     def s(self, param1, param2):#return videostreaming url for this robots IP camera in json format
-        #print ("s:" + param1 + "," + param2) 
+        #print ("s:" + param1 + "," + param2)
         ips = check_output(["hostname", "-I"])
         return "{'ipcamurl':'http://" + ips.decode('UTF-8').split()[0].strip() + ":8000/stream.mjpg'}\n"
-        #print ("{'ipcamurl':'http://" + ips.decode().strip() + ":8000/stream.mjpg'}") 
-        
+        #print ("{'ipcamurl':'http://" + ips.decode().strip() + ":8000/stream.mjpg'}")
+
     def z(self, param1, param2):#firmware version number
         print ("z:" + param1 + "," + param2)
-        return VERSION_NUMBER    
+        return VERSION_NUMBER
 
     def stopAllMotors(self):
         pz.stop() #Stop DC motors
@@ -210,61 +210,61 @@ class Robot():
 
 class Encoder(threading.Thread):
     'Class for Analog encoder on continous rotation servo motors'
-  
+
     def __init__(self, servo_port, analog_port, threshold, mtr):
         threading.Thread.__init__(self)
         self.q = queue.Queue() #q, command queue
         self.event = threading.Event()
-        self.encoderLoop = True       
+        self.encoderLoop = True
         self.servo_port = servo_port
-        self.analog_port = analog_port        
+        self.analog_port = analog_port
         self.threshold = threshold #analog sensor encoder wheel signal threshold
         self.motor = mtr
 
     def startEncoder(self):#start encoder loop
             self.encoderLoop = True
-            
+
     def stopEncoder(self):#Stop encoder loop
             self.encoderLoop = False
-        
-    def addCmd(self, cmd):#function to add command tuple to the command queue        
-        self.q.put(cmd)       
-        
-    def run(self):        
+
+    def addCmd(self, cmd):#function to add command tuple to the command queue
+        self.q.put(cmd)
+
+    def run(self):
         tick = False
         tickp = False
         count = 0
         continueLoop = False #encoder tick counter loop flag
-        while self.encoderLoop:       
+        while self.encoderLoop:
             self.event.wait() #reduce threading cpu resource by only looping when neseccery
             if not self.q.empty():#Test for new commands in the queue
-                count = 0                
+                count = 0
                 data = self.q.get() #get command tuple from queue and parse data
                 pwm = data[0]
-                cmd = data[1]                
+                cmd = data[1]
                 continueLoop = True
-                self.motor(self.servo_port, pwm)               
-            else:               
-                self.event.clear()                
-                    
-            while continueLoop:#position control feedback loop                            
-                val = pz.readInput(self.analog_port)                
+                self.motor(self.servo_port, pwm)
+            else:
+                self.event.clear()
+
+            while continueLoop:#position control feedback loop
+                val = pz.readInput(self.analog_port)
                 if (val < self.threshold):
                     tick = True
                 else:
                     tick = False
-                    
+
                 if (tick != tickp):
                     count = count + 1
 
                 tickp = tick
 
-                if((cmd - count) <= 0):#get next command after completion of previous command                    
+                if((cmd - count) <= 0):#get next command after completion of previous command
                     count = 0
                     tick = False
                     tickp = False
-                    continueLoop = False                    
-     
+                    continueLoop = False
+
 
 
 

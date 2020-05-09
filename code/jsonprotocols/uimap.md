@@ -1,0 +1,11 @@
+Joystick = e80,?,f70,?,
+A = o100,0,
+B =n0,0,
+C = p0,0,
+E-Stop = l0,0,
+Slider 1 = g?,0,
+Slider 2 = TBD
+Slider 3= TBD
+SW1 = h0,0,
+SW2 = i0,0,
+Sensor Data = m0,0,
